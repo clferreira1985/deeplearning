@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Feeling Classifier</title>
+  </head>
+  <body>
+    <h1>Welcome to the Feeling Classifier API</h1>
+    <form id="feelingForm">
+      <label for="prompt">How do you feel today?</label><br />
+      <input type="text" id="prompt" name="prompt" /><br /><br />
+      <input type="submit" value="Submit" />
+    </form>
+    <p id="result"></p>
+
+    <script>
+      document
+        .getElementById("feelingForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+          const prompt = document.getElementById("prompt").value;
+
+          const response = await fetch("/feeling", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ prompt: prompt }),
+          });
+
+          const data = await response.json();
+          const resultElement = document.getElementById("result");
+          if (response.ok) {
+            resultElement.innerHTML = `Feeling: ${data.feeling}`;
+          } else {
+            resultElement.innerHTML = `Error: ${data.error}`;
+          }
+        });
+    </script>
+  </body>
+</html>
